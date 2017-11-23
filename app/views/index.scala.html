@@ -1,0 +1,18 @@
+@(movies: Seq[Movie])
+
+
+<div>
+    <div id="movies">
+
+        <h2>Previously inserted cats:</h2>
+        <table>
+            <tr><th>Id</th>
+                <th>Title</th></tr>
+            @for(m <- movies) {
+                <tr><td>@m.id</td>
+                    <td>@m.title</td></tr>
+            }
+        </table>
+    </div>
+
+</div>
