@@ -1,1 +1,2 @@
-GET        /        controllers.MovieController.index
+GET        /           controllers.MovieController.index(size: Int ?= 20, page: Int ?= 0, title: Option[String])
+GET        /:id        controllers.MovieController.findOne(id: Long)
