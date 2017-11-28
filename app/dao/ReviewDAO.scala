@@ -9,12 +9,13 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent.{ExecutionContext, Future}
 
 class ReviewDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
+                         (movieDAO: MovieDAO)
                          (implicit executionContext: ExecutionContext)
   extends HasDatabaseConfigProvider[JdbcProfile] {
 
   import profile.api._
 
-  private val Reviews = TableQuery[ReviewsTable]
+  val Reviews = TableQuery[ReviewsTable]
 
   def all(userId: Option[Long], movieId: Option[Long]): Future[Seq[Review]] = db
     .run(Reviews
@@ -42,6 +43,8 @@ class ReviewDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
     def userId = column[Long]("user_id")
 
     def movieId = column[Long]("movie_id")
+
+    def movie = foreignKey("review_movie_id_fk", movieId, movieDAO.Movies)(_.id)
 
   }
 
