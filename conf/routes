@@ -1,4 +1,9 @@
-GET         /                 controllers.MovieController.index(size: Int ?= 20, page: Int ?= 0, title: Option[String])
-GET         /:id              controllers.MovieController.findOne(id: Long)
-GET         /users/:id        controllers.UserController.getOne(id: Long)
-POST        /users            controllers.UserController.create
+#Movie
+GET         /movies            controllers.MovieController.index(size: Int ?= 20, page: Int ?= 0, title: Option[String])
+GET         /movies/:id        controllers.MovieController.findOne(id: Long)
+#Review
+GET         /reviews           controllers.ReviewController.findReviews(userId: Option[Long], movieId: Option[Long])
+POST        /reviews           controllers.ReviewController.insert()
+#User
+GET         /users/:id         controllers.UserController.getOne(id: Long)
+POST        /users             controllers.UserController.create
