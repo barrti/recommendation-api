@@ -1,1 +1,3 @@
-GET        /        controllers.MovieController.index
+GET         /                 controllers.MovieController.index
+GET         /users/:id        controllers.UserController.getOne(id: Long)
+POST        /users            controllers.UserController.create
