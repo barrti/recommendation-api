@@ -3,7 +3,9 @@ GET         /movies            controllers.MovieController.index(size: Int ?= 20
 GET         /movies/:id        controllers.MovieController.findOne(id: Long)
 #Review
 GET         /reviews           controllers.ReviewController.findReviews(userId: Option[Long], movieId: Option[Long])
-POST        /reviews           controllers.ReviewController.insert()
+POST        /reviews           controllers.ReviewController.insert
 #User
 GET         /users/:id         controllers.UserController.getOne(id: Long)
 POST        /users             controllers.UserController.create
+#Recommendation
+GET        /recommendation    controllers.RecommendationController.getRecommendations(userId: Long, size: Int)
