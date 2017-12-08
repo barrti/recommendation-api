@@ -1,6 +1,6 @@
 #Movie
 GET         /movies            controllers.MovieController.index(size: Int ?= 20, page: Int ?= 0, title: Option[String])
-GET         /movies/:id        controllers.MovieController.findOne(id: Long)
+GET         /movies/:id        controllers.MovieController.getMovie(id: Long)
 #Review
 GET         /reviews           controllers.ReviewController.findReviews(userId: Option[Long], movieId: Option[Long])
 POST        /reviews           controllers.ReviewController.insert()

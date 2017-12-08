@@ -2,9 +2,10 @@ package dao
 
 import javax.inject.Inject
 
+import dtos.MovieDTO
 import models.Movie
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import slick.jdbc.JdbcProfile
+import slick.jdbc.{GetResult, JdbcProfile}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -15,7 +16,11 @@ class MovieDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
   import profile.api._
 
-  val Movies = TableQuery[MoviesTable]
+  private val Movies = TableQuery[MoviesTable]
+
+  implicit val getMovieDTOResult = {
+    GetResult(r => Option.apply(MovieDTO(r.nextLong, r.nextString, r.nextDouble)))
+  }
 
   def all(size: Int, page: Int, title: Option[String]): Future[Seq[Movie]] = db.run(Movies
     .filter(_.title.toLowerCase like "%" + title.getOrElse("") + "%")
@@ -25,16 +30,11 @@ class MovieDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
   def one(id: Long): Future[Option[Movie]] = db.run(Movies.filter(_.id === id).result.headOption)
 
-//  def getMovieById(id: Long, userId: Long): Future[Option[Movie]] = {//TODO
-//    val query = for {
-//      (m, r) <- (Movies join reviewDAO.Reviews on (_.id === _.movieId)).filter(table => List(
-//        Option.apply(id).map(table._2.movieId === _),
-//        Option.apply(userId).map(table._2.userId === _)
-//      ).collect({
-//        case Some(criteria) => criteria
-//      }).reduceLeftOption(_ && _).getOrElse(true: Rep[Boolean]))
-//    } yield (m.id, m.title, r)
-//  }
+
+  def getMovieByPredicates(id: Long): DBIO[Option[MovieDTO]] =
+    sql"""SELECT m.id, m.title, avg(r.rate) FROM movie m JOIN review r ON r.movie_id = id """.as[Option[MovieDTO]].head
+
+  def getMovie(id: Long): Future[Option[MovieDTO]] = db.run(getMovieByPredicates(id))
 
   private class MoviesTable(tag: Tag) extends Table[Movie](tag, "movie") {
 

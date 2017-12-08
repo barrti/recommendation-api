@@ -15,7 +15,7 @@ class ReviewDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
 
   import profile.api._
 
-  val Reviews = TableQuery[ReviewsTable]
+  private val Reviews = TableQuery[ReviewsTable]
 
   def all(userId: Option[Long], movieId: Option[Long]): Future[Seq[Review]] = db
     .run(Reviews
